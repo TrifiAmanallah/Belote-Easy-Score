@@ -213,6 +213,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:visibility="visible"
             android:src="@drawable/add"
             android:layout_gravity="center" />
 
@@ -231,9 +232,11 @@
         app:layout_constraintVertical_bias="0.96">
 
         <ImageView
+            android:id="@+id/inputIage"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/add"
+            android:visibility="visible"
             android:layout_gravity="center" />
 
     </com.nightonke.boommenu.BoomMenuButton>

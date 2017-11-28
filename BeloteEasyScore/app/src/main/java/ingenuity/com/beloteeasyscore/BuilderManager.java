@@ -36,11 +36,29 @@ public class BuilderManager {
             R.drawable.squirrel
     };
 
+    private static int[] numericImageResources = new int[]{
+            R.drawable.one,
+            R.drawable.two,
+            R.drawable.three,
+            R.drawable.four,
+            R.drawable.five,
+            R.drawable.six,
+            R.drawable.seven,
+            R.drawable.eight,
+            R.drawable.nine,
+            R.drawable.zero,
+    };
+
     private static int imageResourceIndex = 0;
 
     static int getImageResource() {
         if (imageResourceIndex >= imageResources.length) imageResourceIndex = 0;
         return imageResources[imageResourceIndex++];
+    }
+
+    static int getNumericImageResource(int index) {
+        if (index >= numericImageResources.length) index = 0;
+        return numericImageResources[index];
     }
 
     static SimpleCircleButton.Builder getSimpleCircleButtonBuilder() {

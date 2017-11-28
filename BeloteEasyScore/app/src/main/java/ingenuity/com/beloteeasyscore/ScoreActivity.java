@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.BoomButtons.HamButton;
 import com.nightonke.boommenu.ButtonEnum;
@@ -41,9 +42,6 @@ public class ScoreActivity extends Activity {
         rightScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.HAM_4);
         rightScoreAdder.addBuilder(BuilderManager.getHamButtonBuilder());
         initializeInputMenu(rightScoreAdder);
-/*        rightScoreAdder.clearBuilders();
-        for (int i = 0; i < rightScoreAdder.getPiecePlaceEnum().pieceNumber(); i++)
-            rightScoreAdder.addBuilder(BuilderManager.getHamButtonBuilder());*/
 
         leftScoreAdder = (BoomMenuButton) findViewById(R.id.leftScoreAdder);
         leftScoreAdder.setButtonEnum(ButtonEnum.Ham);
@@ -51,14 +49,31 @@ public class ScoreActivity extends Activity {
         leftScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.HAM_4);
         leftScoreAdder.addBuilder(BuilderManager.getHamButtonBuilder());
         initializeInputMenu(leftScoreAdder);
-        /*leftScoreAdder.clearBuilders();
-        for (int i = 0; i < leftScoreAdder.getPiecePlaceEnum().pieceNumber(); i++)
-            leftScoreAdder.addBuilder(BuilderManager.getHamButtonBuilder());*/
+    }
 
+    private void setInputMethodeNumeric() {
+        rightScoreAdder = (BoomMenuButton) findViewById(R.id.rightScoreAdder);
+        rightScoreAdder.setButtonEnum(ButtonEnum.SimpleCircle);
+        rightScoreAdder.setPiecePlaceEnum(PiecePlaceEnum.DOT_10_1);
+        rightScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.SC_10_1);
+        rightScoreAdder.setAutoHide(false);
+        initializeNumericInput(rightScoreAdder);
+        /*for (int i = 0; i < rightScoreAdder.getPiecePlaceEnum().pieceNumber(); i++)
+            rightScoreAdder.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());*/
+
+        leftScoreAdder = (BoomMenuButton) findViewById(R.id.leftScoreAdder);
+        leftScoreAdder.setButtonEnum(ButtonEnum.SimpleCircle);
+        leftScoreAdder.setPiecePlaceEnum(PiecePlaceEnum.DOT_10_1);
+        leftScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.SC_10_1);
+        leftScoreAdder.setAutoHide(false);
+        initializeNumericInput(leftScoreAdder);
+        /*for (int i = 0; i < leftScoreAdder.getPiecePlaceEnum().pieceNumber(); i++)
+            leftScoreAdder.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());*/
     }
 
     private void initializeInputMenu(BoomMenuButton localScoreAdder) {
         localScoreAdder.clearBuilders();
+        //Input Methode Gird
         HamButton.Builder builder = new HamButton.Builder()
                 .normalImageRes(R.drawable.input_gird)
                 .normalTextRes(R.string.input_methode_gird)
@@ -66,15 +81,16 @@ public class ScoreActivity extends Activity {
                 .normalTextColor(Color.BLUE)
                 .subNormalTextColor(Color.BLACK)
                 .normalColor(Color.WHITE)
+                .highlightedColor(Color.BLUE)
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        // When the boom-button corresponding this builder is clicked.
-                        Toast.makeText(ScoreActivity.this, "Clicked " + index, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScoreActivity.this, "Score Gird Input selected", Toast.LENGTH_SHORT).show();
                     }
                 });
         localScoreAdder.addBuilder(builder);
 
+        //Input Methode Numeric
         builder = new HamButton.Builder()
                 .normalImageRes(R.drawable.input_calculatrice)
                 .normalTextRes(R.string.input_methode_calculator)
@@ -82,46 +98,67 @@ public class ScoreActivity extends Activity {
                 .normalTextColor(Color.BLUE)
                 .subNormalTextColor(Color.BLACK)
                 .normalColor(Color.WHITE)
+                .highlightedColor(Color.BLUE)
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        // When the boom-button corresponding this builder is clicked.
-                        Toast.makeText(ScoreActivity.this, "Clicked " + index, Toast.LENGTH_SHORT).show();
+                        setInputMethodeNumeric();
+                        Toast.makeText(ScoreActivity.this, "Numeric Input selected", Toast.LENGTH_SHORT).show();
                     }
                 });
         localScoreAdder.addBuilder(builder);
 
+        //Input Methode Voice
         builder = new HamButton.Builder()
                 .normalImageRes(R.drawable.input_voice)
                 .normalTextRes(R.string.input_methode_voice)
                 .subNormalTextRes(R.string.input_methode_voice_sub_text)
-                .normalTextColor(Color.BLUE)
+                .normalTextColor(Color.LTGRAY)
                 .subNormalTextColor(Color.BLACK)
                 .normalColor(Color.WHITE)
+                .highlightedColor(Color.BLUE)
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        // When the boom-button corresponding this builder is clicked.
-                        Toast.makeText(ScoreActivity.this, "Clicked " + index, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScoreActivity.this, "Voice Feature is Not Free", Toast.LENGTH_SHORT).show();
                     }
                 });
         localScoreAdder.addBuilder(builder);
 
+        //Input Methode camer
         builder = new HamButton.Builder()
                 .normalImageRes(R.drawable.input_camera)
                 .normalTextRes(R.string.input_methode_camera)
                 .subNormalTextRes(R.string.input_methode_camera_sub_text)
-                .normalTextColor(Color.BLUE)
+                .normalTextColor(Color.LTGRAY)
                 .subNormalTextColor(Color.BLACK)
                 .normalColor(Color.WHITE)
+                .highlightedColor(Color.BLUE)
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        // When the boom-button corresponding this builder is clicked.
-                        Toast.makeText(ScoreActivity.this, "Clicked " + index, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScoreActivity.this, "Camera Feature is not Free", Toast.LENGTH_SHORT).show();
                     }
                 });
         localScoreAdder.addBuilder(builder);
+    }
+
+    private void initializeNumericInput(BoomMenuButton localNumericInput) {
+        localNumericInput.clearBuilders();
+
+        for (int i = 0; i < localNumericInput.getPiecePlaceEnum().pieceNumber(); i++) {
+            SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder()
+                    .normalImageRes(BuilderManager.getNumericImageResource(i))
+                    .normalColor(Color.WHITE)
+                    .highlightedColor(Color.GRAY)
+                    .listener(new OnBMClickListener() {
+                        @Override
+                        public void onBoomButtonClick(int index) {
+                            Toast.makeText(ScoreActivity.this, "Pressed = " + index, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            localNumericInput.addBuilder(builder);
+        }
     }
 
     private void initializeScoreTable() {
