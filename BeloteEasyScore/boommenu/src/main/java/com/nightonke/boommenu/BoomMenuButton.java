@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.nightonke.boommenu.Animation.AnimationManager;
 import com.nightonke.boommenu.Animation.BoomEnum;
@@ -562,6 +564,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         ExceptionManager.judge(this, boomButtonBuilders);
         boomStateEnum = BoomStateEnum.WillBoom;
         if (onBoomListener != null) onBoomListener.onBoomWillShow();
+        Intent intent = new Intent("com.nightonke.boommenu.onBoomWillShow");
+        context.sendBroadcast(intent);
         calculateStartPositions(false);
         createButtons();
         dimBackground(immediately);
@@ -590,6 +594,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         if (isAnimating() || boomStateEnum != BoomStateEnum.DidBoom) return;
         boomStateEnum = BoomStateEnum.WillReboom;
         if (onBoomListener != null) onBoomListener.onBoomWillHide();
+        Intent intent = new Intent("com.nightonke.boommenu.onBoomWillHide");
+        context.sendBroadcast(intent);
         lightBackground(immediately);
         startReboomAnimations(immediately);
         startReboomAnimationForFadeViews(immediately);
@@ -609,6 +615,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                 super.onAnimationEnd(animation);
                 boomStateEnum = BoomStateEnum.DidBoom;
                 if (onBoomListener != null) onBoomListener.onBoomDidShow();
+                Intent intent = new Intent("com.nightonke.boommenu.onBoomDidShow");
+                context.sendBroadcast(intent);
             }
         });
         if (piecePlaceEnum == Share) {
@@ -633,7 +641,10 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         }
         boomStateEnum = BoomStateEnum.DidReboom;
         if (onBoomListener != null) onBoomListener.onBoomDidHide();
+        Intent intent = new Intent("com.nightonke.boommenu.onBoomDidHide");
+        context.sendBroadcast(intent);
         background.setVisibility(GONE);
+
         clearViews(false);
     }
 
@@ -881,6 +892,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     protected void onBackgroundClicked() {
         if (isAnimating()) return;
         if (onBoomListener != null) onBoomListener.onBackgroundClick();
+        Intent intent = new Intent("com.nightonke.boommenu.onBoomBackgroundClick");
+        context.sendBroadcast(intent);
         if (cancelable) reboom();
     }
 
@@ -1032,6 +1045,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     public void onButtonClick(int index, BoomButton boomButton) {
         if (isAnimating()) return;
         if (onBoomListener != null) onBoomListener.onClicked(index, boomButton);
+        Intent intent = new Intent("com.nightonke.boommenu.onBoomClicked");
+        context.sendBroadcast(intent);
         if (autoHide) reboom();
     }
 

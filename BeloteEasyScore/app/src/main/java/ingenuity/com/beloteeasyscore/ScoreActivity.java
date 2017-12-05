@@ -1,6 +1,10 @@
 package ingenuity.com.beloteeasyscore;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,10 +31,23 @@ public class ScoreActivity extends Activity {
 
     private BoomMenuButton rightScoreAdder;
     private BoomMenuButton leftScoreAdder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
+        IntentFilter onBoomClickedFilter = new IntentFilter("com.nightonke.boommenu.onBoomClicked");
+        IntentFilter onBoomBackgroundClickFilter = new IntentFilter("com.nightonke.boommenu.onBoomBackgroundClick");
+        IntentFilter onBoomWillHideFilter = new IntentFilter("com.nightonke.boommenu.onBoomWillHide");
+        IntentFilter onBoomDidHideFilter = new IntentFilter("com.nightonke.boommenu.onBoomDidHide");
+        IntentFilter onBoomWillShowFilter = new IntentFilter("com.nightonke.boommenu.onBoomWillShow");
+        IntentFilter onBoomDidShowFilter = new IntentFilter("com.nightonke.boommenu.onBoomDidShow");
+        registerReceiver(onBoomClickedReceiver, onBoomClickedFilter);
+        registerReceiver(onBoomBackgroundClickReceiver, onBoomBackgroundClickFilter);
+        registerReceiver(onBoomWillHideReceiver, onBoomWillHideFilter);
+        registerReceiver(onBoomDidHideReceiver, onBoomDidHideFilter);
+        registerReceiver(onBoomWillShowReceiver, onBoomWillShowFilter);
+        registerReceiver(onBoomDidShowReceiver, onBoomDidShowFilter);
         initializeAddScoreButtons();
         initializeScoreTable();
     }
@@ -58,8 +75,6 @@ public class ScoreActivity extends Activity {
         rightScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.SC_10_1);
         rightScoreAdder.setAutoHide(false);
         initializeNumericInput(rightScoreAdder);
-        /*for (int i = 0; i < rightScoreAdder.getPiecePlaceEnum().pieceNumber(); i++)
-            rightScoreAdder.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());*/
 
         leftScoreAdder = (BoomMenuButton) findViewById(R.id.leftScoreAdder);
         leftScoreAdder.setButtonEnum(ButtonEnum.SimpleCircle);
@@ -67,8 +82,6 @@ public class ScoreActivity extends Activity {
         leftScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.SC_10_1);
         leftScoreAdder.setAutoHide(false);
         initializeNumericInput(leftScoreAdder);
-        /*for (int i = 0; i < leftScoreAdder.getPiecePlaceEnum().pieceNumber(); i++)
-            leftScoreAdder.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());*/
     }
 
     private void initializeInputMenu(BoomMenuButton localScoreAdder) {
@@ -154,10 +167,35 @@ public class ScoreActivity extends Activity {
                     .listener(new OnBMClickListener() {
                         @Override
                         public void onBoomButtonClick(int index) {
-                            Toast.makeText(ScoreActivity.this, "Pressed = " + index, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ScoreActivity.this, "Pressed = " + (index + 1), Toast.LENGTH_SHORT).show();
+                            setNumericInputText(index);
                         }
                     });
             localNumericInput.addBuilder(builder);
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        TextView inputNumberText =(TextView)findViewById(R.id.numericInputText);
+        String inputNumberString = (String) inputNumberText.getText();
+        if(inputNumberString.length()>0) {
+            inputNumberString = inputNumberString.substring(0, inputNumberString.length() - 1);
+            inputNumberText.setVisibility(View.VISIBLE);
+            inputNumberText.setText(inputNumberString);
+        }
+    }
+
+    private void setNumericInputText(int index) {
+        int inputNumber = index + 1;
+        if (inputNumber > 9) inputNumber = 0;
+        if (inputNumber < 0) inputNumber = 0;
+        TextView inputNumberText =(TextView)findViewById(R.id.numericInputText);
+        inputNumberText.setVisibility(View.VISIBLE);
+        String inputNumberString = (String) inputNumberText.getText();
+        if(inputNumberString.length()<3) {
+            inputNumberString = inputNumberString + String.valueOf(inputNumber);
+            inputNumberText.setText(inputNumberString);
         }
     }
 
@@ -197,4 +235,45 @@ public class ScoreActivity extends Activity {
             table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
         }
     }
+
+    BroadcastReceiver onBoomClickedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        }
+    };
+
+    BroadcastReceiver onBoomBackgroundClickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        }
+    };
+
+    BroadcastReceiver onBoomWillHideReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    };
+    BroadcastReceiver onBoomDidHideReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(ScoreActivity.this, "received onBoomDidHide", Toast.LENGTH_SHORT).show();
+            TextView inputNumberText =(TextView)findViewById(R.id.numericInputText);
+            inputNumberText.setVisibility(View.INVISIBLE);
+        }
+    };
+
+    BroadcastReceiver onBoomWillShowReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    };
+
+    BroadcastReceiver onBoomDidShowReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    };
 }

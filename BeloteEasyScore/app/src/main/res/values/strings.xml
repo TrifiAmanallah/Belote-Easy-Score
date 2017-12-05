@@ -10,6 +10,9 @@
     <string name="input_methode_voice_sub_text">Use your voice for input</string>
     <string name="input_methode_camera_sub_text">Use your camera to calculate the score</string>
 
+    <string name="input_numeric_displayed"></string>
+
+
     <string name="simple_circle_button_example">Simple Circle Button Example</string>
     <string name="text_inside_circle_button_example">Text Inside Circle Button Example</string>
     <string name="text_outside_circle_button_example">Text Outside Circle Button Example</string>
