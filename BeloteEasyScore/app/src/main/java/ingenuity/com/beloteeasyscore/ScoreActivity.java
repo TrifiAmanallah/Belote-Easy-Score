@@ -27,10 +27,13 @@ import com.nightonke.boommenu.BoomButtons.HamButton;
 import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 
-public class ScoreActivity extends Activity {
+public class ScoreActivity extends Activity implements EventsHelper {
 
     private BoomMenuButton rightScoreAdder;
     private BoomMenuButton leftScoreAdder;
+    private events currentEvent = events.FIRST_LAUNCH;
+    private team currenTeam = team.LEFT_TEAM;
+    private TableLayout table = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,7 @@ public class ScoreActivity extends Activity {
         registerReceiver(onBoomWillShowReceiver, onBoomWillShowFilter);
         registerReceiver(onBoomDidShowReceiver, onBoomDidShowFilter);
         initializeAddScoreButtons();
-        initializeScoreTable();
+        //initializeScoreTable();
     }
 
     private void initializeAddScoreButtons() {
@@ -68,22 +71,6 @@ public class ScoreActivity extends Activity {
         initializeInputMenu(leftScoreAdder);
     }
 
-    private void setInputMethodeNumeric() {
-        rightScoreAdder = (BoomMenuButton) findViewById(R.id.rightScoreAdder);
-        rightScoreAdder.setButtonEnum(ButtonEnum.SimpleCircle);
-        rightScoreAdder.setPiecePlaceEnum(PiecePlaceEnum.DOT_10_1);
-        rightScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.SC_10_1);
-        rightScoreAdder.setAutoHide(false);
-        initializeNumericInput(rightScoreAdder);
-
-        leftScoreAdder = (BoomMenuButton) findViewById(R.id.leftScoreAdder);
-        leftScoreAdder.setButtonEnum(ButtonEnum.SimpleCircle);
-        leftScoreAdder.setPiecePlaceEnum(PiecePlaceEnum.DOT_10_1);
-        leftScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.SC_10_1);
-        leftScoreAdder.setAutoHide(false);
-        initializeNumericInput(leftScoreAdder);
-    }
-
     private void initializeInputMenu(BoomMenuButton localScoreAdder) {
         localScoreAdder.clearBuilders();
         //Input Methode Gird
@@ -98,7 +85,8 @@ public class ScoreActivity extends Activity {
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        Toast.makeText(ScoreActivity.this, "Score Gird Input selected", Toast.LENGTH_SHORT).show();
+                        //if (currentEvent == SELECT_INPUT_MENU_DISPLAYED) currentEvent = GIRD_INPUTS_SELECTED;
+                        Toast.makeText(ScoreActivity.this, "Score Gird Input not yet implemented", Toast.LENGTH_SHORT).show();
                     }
                 });
         localScoreAdder.addBuilder(builder);
@@ -115,6 +103,7 @@ public class ScoreActivity extends Activity {
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
+                        if (currentEvent == events.SELECT_INPUT_MENU_DISPLAYED) currentEvent = events.NUMERIC_INPUTS_SELECTED_NOT_DISPLAYED;
                         setInputMethodeNumeric();
                         Toast.makeText(ScoreActivity.this, "Numeric Input selected", Toast.LENGTH_SHORT).show();
                     }
@@ -133,12 +122,13 @@ public class ScoreActivity extends Activity {
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
+                        //if (currentEvent == SELECT_INPUT_MENU_DISPLAYED) currentEvent = VOICE_INPUTS_SELECTED;
                         Toast.makeText(ScoreActivity.this, "Voice Feature is Not Free", Toast.LENGTH_SHORT).show();
                     }
                 });
         localScoreAdder.addBuilder(builder);
 
-        //Input Methode camer
+        //Input Methode camera
         builder = new HamButton.Builder()
                 .normalImageRes(R.drawable.input_camera)
                 .normalTextRes(R.string.input_methode_camera)
@@ -150,13 +140,30 @@ public class ScoreActivity extends Activity {
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
+                        //if (currentEvent == SELECT_INPUT_MENU_DISPLAYED) currentEvent = CAMERA_INPUTS_SELECTED;
                         Toast.makeText(ScoreActivity.this, "Camera Feature is not Free", Toast.LENGTH_SHORT).show();
                     }
                 });
         localScoreAdder.addBuilder(builder);
     }
 
-    private void initializeNumericInput(BoomMenuButton localNumericInput) {
+    private void setInputMethodeNumeric() {
+        rightScoreAdder = (BoomMenuButton) findViewById(R.id.rightScoreAdder);
+        rightScoreAdder.setButtonEnum(ButtonEnum.SimpleCircle);
+        rightScoreAdder.setPiecePlaceEnum(PiecePlaceEnum.DOT_10_1);
+        rightScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.SC_10_1);
+        rightScoreAdder.setAutoHide(false);
+        initializeNumericInput(rightScoreAdder);
+
+        leftScoreAdder = (BoomMenuButton) findViewById(R.id.leftScoreAdder);
+        leftScoreAdder.setButtonEnum(ButtonEnum.SimpleCircle);
+        leftScoreAdder.setPiecePlaceEnum(PiecePlaceEnum.DOT_10_1);
+        leftScoreAdder.setButtonPlaceEnum(ButtonPlaceEnum.SC_10_1);
+        leftScoreAdder.setAutoHide(false);
+        initializeNumericInput(leftScoreAdder);
+    }
+
+    private void initializeNumericInput(final BoomMenuButton localNumericInput) {
         localNumericInput.clearBuilders();
 
         for (int i = 0; i < localNumericInput.getPiecePlaceEnum().pieceNumber(); i++) {
@@ -168,21 +175,12 @@ public class ScoreActivity extends Activity {
                         @Override
                         public void onBoomButtonClick(int index) {
                             Toast.makeText(ScoreActivity.this, "Pressed = " + (index + 1), Toast.LENGTH_SHORT).show();
+                            if (localNumericInput == (BoomMenuButton)rightScoreAdder ) currenTeam = team.RIGHT_TEAM;
+                            if (localNumericInput == (BoomMenuButton)leftScoreAdder  ) currenTeam = team.LEFT_TEAM;
                             setNumericInputText(index);
                         }
                     });
             localNumericInput.addBuilder(builder);
-        }
-    }
-
-    @Override
-    public void onBackPressed(){
-        TextView inputNumberText =(TextView)findViewById(R.id.numericInputText);
-        String inputNumberString = (String) inputNumberText.getText();
-        if(inputNumberString.length()>0) {
-            inputNumberString = inputNumberString.substring(0, inputNumberString.length() - 1);
-            inputNumberText.setVisibility(View.VISIBLE);
-            inputNumberText.setText(inputNumberString);
         }
     }
 
@@ -199,12 +197,72 @@ public class ScoreActivity extends Activity {
         }
     }
 
-    private void initializeScoreTable() {
-        TableLayout table = (TableLayout) findViewById(R.id.scoreTable);
+    private void addNumericInputScore() {
+        TextView inputNumberText =(TextView)findViewById(R.id.numericInputText);
+        String inputNumberString = (String) inputNumberText.getText();
+        if (inputNumberString.length() < 1) return;
+        String rightTeamScore = null;
+        String leftTeamScore = null;
+        if (currenTeam == team.RIGHT_TEAM ) {
+            rightTeamScore = inputNumberString;
+            leftTeamScore  = "0";
+        }
+        if (currenTeam == team.LEFT_TEAM ) {
+            rightTeamScore = "0";
+            leftTeamScore  = inputNumberString;
+        }
+
+        table = (TableLayout) findViewById(R.id.scoreTable);
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
         tableRowParams.weight = 1;
+        TableRow row = new TableRow(this);
+
+        TextView textEmptyLeft = new TextView(this);
+        textEmptyLeft.setTextAppearance(this, R.style.littleScoreTextLeft);
+        textEmptyLeft.setText("");
+
+        row.addView(textEmptyLeft, tableRowParams);
+
+        // create a new TextView
+        TextView textLeft = new TextView(this);
+        textLeft.setTextAppearance(this, R.style.littleScoreTextLeft);
+        textLeft.setText(String.valueOf(leftTeamScore));
+        row.addView(textLeft, tableRowParams);
+
+        TextView textEmptyRight = new TextView(this);
+        textEmptyRight.setTextAppearance(this, R.style.littleScoreTextLeft);
+        textEmptyRight.setText("             ");
+        row.addView(textEmptyRight, tableRowParams);
+
+
+        TextView textRight = new TextView(this);
+        textRight.setTextAppearance(this, R.style.littleScoreTextRight);
+        textRight.setText(String.valueOf(rightTeamScore));
+        row.addView(textRight, tableRowParams);
+
+        // add the TableRow to the TableLayout
+        table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+    }
+
+    @Override
+    public void onBackPressed(){
+        TextView inputNumberText =(TextView)findViewById(R.id.numericInputText);
+        String inputNumberString = (String) inputNumberText.getText();
+        if(inputNumberString.length()>0) {
+            inputNumberString = inputNumberString.substring(0, inputNumberString.length() - 1);
+            inputNumberText.setVisibility(View.VISIBLE);
+            inputNumberText.setText(inputNumberString);
+        }
+    }
+
+
+    private void initializeScoreTable() {
+        table = (TableLayout) findViewById(R.id.scoreTable);
+        TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
+        tableRowParams.weight = 1;
+
         int counter = 0;
-        for(counter = 150 ; counter < 250; counter ++) {
+        for(counter = 1 ; counter < 50; counter ++) {
             // create a new TableRow
             TableRow row = new TableRow(this);
 
@@ -239,6 +297,7 @@ public class ScoreActivity extends Activity {
     BroadcastReceiver onBoomClickedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            //Toast.makeText(ScoreActivity.this, "received onBoomClickedReceiver", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -254,12 +313,19 @@ public class ScoreActivity extends Activity {
 
         }
     };
+
     BroadcastReceiver onBoomDidHideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (currentEvent == events.SELECT_INPUT_MENU_DISPLAYED) currentEvent = events.FIRST_LAUNCH;
+            if (currentEvent == events.NUMERIC_INPUTS_SELECTED_DISPLAYED) {
+                currentEvent = events.NUMERIC_INPUTS_SELECTED_NOT_DISPLAYED;
+                TextView inputNumberText =(TextView)findViewById(R.id.numericInputText);
+                inputNumberText.setVisibility(View.INVISIBLE);
+                addNumericInputScore();
+            }
             Toast.makeText(ScoreActivity.this, "received onBoomDidHide", Toast.LENGTH_SHORT).show();
-            TextView inputNumberText =(TextView)findViewById(R.id.numericInputText);
-            inputNumberText.setVisibility(View.INVISIBLE);
+
         }
     };
 
@@ -273,7 +339,9 @@ public class ScoreActivity extends Activity {
     BroadcastReceiver onBoomDidShowReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            Toast.makeText(ScoreActivity.this, "received onBoomDidShowReceiver", Toast.LENGTH_SHORT).show();
+            if (currentEvent == events.FIRST_LAUNCH) currentEvent = events.SELECT_INPUT_MENU_DISPLAYED;
+            if (currentEvent == events.NUMERIC_INPUTS_SELECTED_NOT_DISPLAYED) currentEvent = events.NUMERIC_INPUTS_SELECTED_DISPLAYED;
         }
     };
 }
