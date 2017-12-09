@@ -50,8 +50,8 @@ class NumericInput {
     private void initializeNumericInput( BoomMenuButton mBoomMenuButton,team _team) {
         Log.d(LogTag, "initializeNumericInput called");
         mBoomMenuButton.setButtonEnum(ButtonEnum.SimpleCircle);
-        mBoomMenuButton.setPiecePlaceEnum(PiecePlaceEnum.DOT_10_1);
-        mBoomMenuButton.setButtonPlaceEnum(ButtonPlaceEnum.SC_10_1);
+        mBoomMenuButton.setPiecePlaceEnum(PiecePlaceEnum.DOT_12_1);
+        mBoomMenuButton.setButtonPlaceEnum(ButtonPlaceEnum.SC_12_1);
         mBoomMenuButton.setAutoHide(false);
         initializeNumericBoomMenuButton(mBoomMenuButton,_team);
     }
@@ -85,8 +85,17 @@ class NumericInput {
     private void setNumericInputText(int index) {
         Log.d(LogTag, "setNumericInputText called");
         int inputNumber = index + 1;
+        if (inputNumber == 10) {
+            deleteAllInput();
+            return;
+        }
+        if (inputNumber == 12) {
+            deleteLastInput();
+            return;
+        }
         if (inputNumber > 9) inputNumber = 0;
         if (inputNumber < 0) inputNumber = 0;
+
         TextView inputNumberText =(TextView) mActivity.findViewById(R.id.numericInputText);
         inputNumberText.setVisibility(View.VISIBLE);
         String inputNumberString = (String) inputNumberText.getText();
@@ -94,6 +103,21 @@ class NumericInput {
             inputNumberString = inputNumberString + String.valueOf(inputNumber);
             inputNumberText.setText(inputNumberString);
         }
+    }
+
+    private void deleteLastInput() {
+        TextView inputNumberText =(TextView) mActivity.findViewById(R.id.numericInputText);
+        String inputNumberString = (String) inputNumberText.getText();
+        if(inputNumberString.length()>0) {
+            inputNumberString = inputNumberString.substring(0, inputNumberString.length() - 1);
+            inputNumberText.setVisibility(View.VISIBLE);
+            inputNumberText.setText(inputNumberString);
+        }
+    }
+
+    private void deleteAllInput() {
+        TextView inputNumberText =(TextView) mActivity.findViewById(R.id.numericInputText);
+        inputNumberText.setText("");
     }
 
     private void registerReceivers() {

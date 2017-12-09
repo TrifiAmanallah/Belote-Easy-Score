@@ -46,7 +46,9 @@ public class BuilderManager {
             R.drawable.seven,
             R.drawable.eight,
             R.drawable.nine,
+            R.drawable.delete,
             R.drawable.zero,
+            R.drawable.back,
     };
 
     private static int imageResourceIndex = 0;

@@ -45,6 +45,7 @@ public enum ButtonPlaceEnum {
     SC_9_2(33),
     SC_9_3(34),
     SC_10_1(41),
+    SC_12_1(42),
     HAM_1 (35),
     HAM_2 (36),
     HAM_3 (37),
