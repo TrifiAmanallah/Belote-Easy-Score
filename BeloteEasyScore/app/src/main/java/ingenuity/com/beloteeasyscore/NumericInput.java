@@ -99,7 +99,7 @@ class NumericInput {
         TextView inputNumberText =(TextView) mActivity.findViewById(R.id.numericInputText);
         inputNumberText.setVisibility(View.VISIBLE);
         String inputNumberString = (String) inputNumberText.getText();
-        if(inputNumberString.length()<3) {
+        if(inputNumberString.length()<3 && !(inputNumberString.length()<1 && inputNumber == 0)) {
             inputNumberString = inputNumberString + String.valueOf(inputNumber);
             inputNumberText.setText(inputNumberString);
         }

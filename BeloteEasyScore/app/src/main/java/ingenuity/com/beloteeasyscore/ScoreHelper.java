@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -76,6 +77,7 @@ public class ScoreHelper {
     private void addRawScoreTable(String _leftTeamScore, String _rightTeamScore) {
         Log.d(LogTag, "addNewResult called" );
         TableLayout table = (TableLayout) mActivity.findViewById(R.id.scoreTable);
+        ScrollView scrollView = (ScrollView) mActivity.findViewById(R.id.scrollView);
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
         tableRowParams.weight = 1;
         TableRow row = new TableRow(mContext);
@@ -84,6 +86,7 @@ public class ScoreHelper {
         addColumnScoreTable("             ",row, tableRowParams);
         addColumnScoreTable(_rightTeamScore,row, tableRowParams);
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        scrollView.fullScroll(ScrollView.FOCUS_DOWN);
     }
 
     private void addColumnScoreTable(String _Text, TableRow _row, TableRow.LayoutParams _tableRowParams) {
