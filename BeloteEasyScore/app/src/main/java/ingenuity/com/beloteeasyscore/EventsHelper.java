@@ -4,6 +4,8 @@ class EventsHelper {
 
     private static team currenTeam = team.LEFT_TEAM;
     private static events currentEvent = events.FIRST_LAUNCH;
+    private static int leftTeamGlobalScore = 0;
+    private static int rightTeamGlobalScore = 0;
 
     enum events {
         FIRST_LAUNCH,
@@ -34,6 +36,23 @@ class EventsHelper {
 
     static void setcurrentEvent(events _events) {
         currentEvent = _events;
+    }
+
+    static void updateGlobalScore(team _team, int _newScore) {
+        if(_team == team.LEFT_TEAM) leftTeamGlobalScore += _newScore;
+        if(_team == team.RIGHT_TEAM) rightTeamGlobalScore += _newScore;
+    }
+
+    static int getGlobalScore(team _team){
+        if(_team == team.LEFT_TEAM) return leftTeamGlobalScore;
+        if(_team == team.RIGHT_TEAM) return rightTeamGlobalScore;
+        return -1;
+    }
+
+    static String getGlobalScoreString(team _team){
+        if(_team == team.LEFT_TEAM) return String.valueOf(leftTeamGlobalScore);
+        if(_team == team.RIGHT_TEAM) return String.valueOf(rightTeamGlobalScore);
+        return "-1";
     }
 
     static String getEventName(events _events) {

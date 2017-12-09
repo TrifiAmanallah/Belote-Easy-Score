@@ -48,6 +48,9 @@ public class ScoreHelper {
             leftTeamScore  = _score;
         }
         addRawScoreTable(leftTeamScore,rightTeamScore);
+        updateGlobalScore(RIGHT_TEAM,Integer.valueOf(rightTeamScore));
+        updateGlobalScore(LEFT_TEAM,Integer.valueOf(leftTeamScore));
+        updateGlobalScoreText();
     }
 
     private String calculateLooserScore(String _score) {
@@ -55,6 +58,13 @@ public class ScoreHelper {
         int winnerScore = Integer.valueOf(_score);
         looserScore = 180 - winnerScore; //TODO Find Algorithm to calculate correct score
         return String.valueOf(looserScore);
+    }
+
+    private void updateGlobalScoreText(){
+        TextView scoreLeftTeamText =(TextView) mActivity.findViewById(R.id.scoreTeam1);
+        TextView scoreRightTeamText =(TextView) mActivity.findViewById(R.id.scoreTeam2);
+        scoreLeftTeamText.setText(getGlobalScoreString(LEFT_TEAM));
+        scoreRightTeamText.setText(getGlobalScoreString(RIGHT_TEAM));
     }
 
     private void clearLastInput(TextView _TextView) {
