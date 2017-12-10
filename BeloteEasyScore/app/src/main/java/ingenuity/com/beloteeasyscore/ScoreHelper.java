@@ -14,22 +14,23 @@ import static ingenuity.com.beloteeasyscore.EventsHelper.team.*;
 
 public class ScoreHelper {
 
-    private static final String LogTag = "BeloteEasyScore: 4";
+    private static final String LogTag = "BeloteEasyScore";
+    private static final String SubLogTag = "ScoreHelper: ";
     private Context mContext;
     private Activity mActivity;
 
     ScoreHelper (Context _Context) {
-        Log.d(LogTag, "ScoreHelper called");
+        Log.d(LogTag, SubLogTag + "ScoreHelper called");
         mContext = _Context;
         mActivity = (Activity) mContext;
     }
 
     void addNumericInputScore() {
-        Log.d(LogTag, "addNumericInputScore called" );
+        Log.d(LogTag, SubLogTag + "addNumericInputScore called" );
         TextView inputNumberText =(TextView) mActivity.findViewById(R.id.numericInputText);
         String inputNumberString = (String) inputNumberText.getText();
         if (inputNumberString.length() < 1) {
-            Log.d(LogTag, "Input number is empty" );
+            Log.d(LogTag, SubLogTag + "Input number is empty" );
             clearLastInput(inputNumberText);
             return;
         }
@@ -69,13 +70,13 @@ public class ScoreHelper {
     }
 
     private void clearLastInput(TextView _TextView) {
-        Log.d(LogTag, "clearLastInput called" );
+        Log.d(LogTag, SubLogTag + "clearLastInput called" );
         _TextView.setVisibility(View.INVISIBLE);
         _TextView.setText("");
     }
 
     private void addRawScoreTable(String _leftTeamScore, String _rightTeamScore) {
-        Log.d(LogTag, "addNewResult called" );
+        Log.d(LogTag, SubLogTag + "addNewResult called" );
         TableLayout table = (TableLayout) mActivity.findViewById(R.id.scoreTable);
         ScrollView scrollView = (ScrollView) mActivity.findViewById(R.id.scrollView);
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
@@ -97,7 +98,7 @@ public class ScoreHelper {
     }
 
     public void initializeDummyScoreTable() {
-        Log.d(LogTag, "initializeScoreTable called");
+        Log.d(LogTag, SubLogTag + "initializeScoreTable called");
         TableLayout table = (TableLayout) mActivity.findViewById(R.id.scoreTable);
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
         tableRowParams.weight = 1;

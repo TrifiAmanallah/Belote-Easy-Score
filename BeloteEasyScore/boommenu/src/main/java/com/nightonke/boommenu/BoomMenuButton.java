@@ -19,6 +19,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -322,6 +323,16 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                 boom();
             }
         });
+
+        button.setOnLongClickListener (new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent("com.nightonke.boommenu.onLongClick");
+                context.sendBroadcast(intent);
+                return false;
+            }
+        });
+
         initDraggableTouchListener();
 
         setButtonSize();
@@ -1043,6 +1054,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
 
     @Override
     public void onButtonClick(int index, BoomButton boomButton) {
+        Log.d("Amanallah", "onClick BoomMenu");
         if (isAnimating()) return;
         if (onBoomListener != null) onBoomListener.onClicked(index, boomButton);
         Intent intent = new Intent("com.nightonke.boommenu.onBoomClicked");

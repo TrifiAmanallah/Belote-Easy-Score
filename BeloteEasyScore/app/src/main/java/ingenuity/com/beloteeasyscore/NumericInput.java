@@ -25,13 +25,14 @@ import static ingenuity.com.beloteeasyscore.EventsHelper.team.*;
 
 class NumericInput {
 
-    private static final String LogTag = "BeloteEasyScore: 2";
+    private static final String LogTag = "BeloteEasyScore";
+    private static final String SubLogTag = "NumericInput: ";
     private Context mContext = null;
     private Activity mActivity = null;
     private ScoreHelper mScoreHelper = null;
 
     NumericInput(Context _Context) {
-        Log.d(LogTag, "NumericInput called");
+        Log.d(LogTag, SubLogTag + "NumericInput called");
         mContext = _Context;
         mActivity = (Activity) mContext;
         mScoreHelper = new ScoreHelper(_Context);
@@ -40,7 +41,7 @@ class NumericInput {
     }
 
     private void setInputMethodeNumeric () {
-        Log.d(LogTag, "setInputMethodeNumeric called");
+        Log.d(LogTag, SubLogTag + "setInputMethodeNumeric called");
         BoomMenuButton rightScoreAdder = (BoomMenuButton) mActivity.findViewById(R.id.rightScoreAdder);
         BoomMenuButton leftScoreAdder  = (BoomMenuButton) mActivity.findViewById(R.id.leftScoreAdder);
         initializeNumericInput(rightScoreAdder,RIGHT_TEAM);
@@ -48,7 +49,7 @@ class NumericInput {
     }
 
     private void initializeNumericInput( BoomMenuButton mBoomMenuButton,team _team) {
-        Log.d(LogTag, "initializeNumericInput called");
+        Log.d(LogTag, SubLogTag + "initializeNumericInput called");
         mBoomMenuButton.setButtonEnum(ButtonEnum.SimpleCircle);
         mBoomMenuButton.setPiecePlaceEnum(PiecePlaceEnum.DOT_12_1);
         mBoomMenuButton.setButtonPlaceEnum(ButtonPlaceEnum.SC_12_1);
@@ -57,7 +58,7 @@ class NumericInput {
     }
 
     private void initializeNumericBoomMenuButton(final BoomMenuButton localNumericInput,final team _team) {
-        Log.d(LogTag, "initializeNumericBoomMenuButton called");
+        Log.d(LogTag, SubLogTag + "initializeNumericBoomMenuButton called");
         localNumericInput.clearBuilders();
 
         for (int i = 0; i < localNumericInput.getPiecePlaceEnum().pieceNumber(); i++) {
@@ -68,7 +69,7 @@ class NumericInput {
                     .listener(new OnBMClickListener() {
                         @Override
                         public void onBoomButtonClick(int index) {
-                            Log.d(LogTag,"onBoomButtonClick Pressed = " + (index + 1));
+                            Log.d(LogTag,SubLogTag + "onBoomButtonClick Pressed = " + (index + 1));
                             OnNumberClicked(_team, index);
                         }
                     });
@@ -77,13 +78,13 @@ class NumericInput {
     }
 
     private void OnNumberClicked(team _team, int _index) {
-        Log.d(LogTag, "OnNumberClicked called");
+        Log.d(LogTag, SubLogTag + "OnNumberClicked called");
         setCurrentSelectedTeam(_team);
         setNumericInputText(_index);
     }
 
     private void setNumericInputText(int index) {
-        Log.d(LogTag, "setNumericInputText called");
+        Log.d(LogTag, SubLogTag + "setNumericInputText called");
         int inputNumber = index + 1;
         if (inputNumber == 10) {
             deleteAllInput();
@@ -127,39 +128,41 @@ class NumericInput {
         IntentFilter onBoomDidHideFilter = new IntentFilter("com.nightonke.boommenu.onBoomDidHide");
         IntentFilter onBoomWillShowFilter = new IntentFilter("com.nightonke.boommenu.onBoomWillShow");
         IntentFilter onBoomDidShowFilter = new IntentFilter("com.nightonke.boommenu.onBoomDidShow");
+        IntentFilter onBoomLongClickFilter = new IntentFilter("com.nightonke.boommenu.onLongClick");
         mContext.registerReceiver(onBoomClickedReceiver, onBoomClickedFilter);
         mContext.registerReceiver(onBoomBackgroundClickReceiver, onBoomBackgroundClickFilter);
         mContext.registerReceiver(onBoomWillHideReceiver, onBoomWillHideFilter);
         mContext.registerReceiver(onBoomDidHideReceiver, onBoomDidHideFilter);
         mContext.registerReceiver(onBoomWillShowReceiver, onBoomWillShowFilter);
         mContext.registerReceiver(onBoomDidShowReceiver, onBoomDidShowFilter);
+        mContext.registerReceiver(onBoomLongClickReceiver, onBoomLongClickFilter);
     }
 
     private BroadcastReceiver onBoomClickedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomClicked Received");
+            Log.d(LogTag, SubLogTag + "onBoomClicked Received");
         }
     };
 
     private BroadcastReceiver onBoomBackgroundClickReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomBackgroundClick Received");
+            Log.d(LogTag, SubLogTag + "onBoomBackgroundClick Received");
         }
     };
 
     private BroadcastReceiver onBoomWillHideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomWillHide Received");
+            Log.d(LogTag, SubLogTag + "onBoomWillHide Received");
         }
     };
 
     private BroadcastReceiver onBoomDidHideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomDidHide Received" );
+            Log.d(LogTag, SubLogTag + "onBoomDidHide Received" );
             if (getcurrentEvent() == NUMERIC_INPUTS_SELECTED_DISPLAYED) {
                 setcurrentEvent(NUMERIC_INPUTS_SELECTED_NOT_DISPLAYED);
                 mScoreHelper.addNumericInputScore();
@@ -170,16 +173,24 @@ class NumericInput {
     private BroadcastReceiver onBoomWillShowReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomWillShow Received");
-            Log.d(LogTag, "Adding Score to: " + getTeamName(getCurrentSelectedTeam()));
+            Log.d(LogTag, SubLogTag + "onBoomWillShow Received");
+            Log.d(LogTag, SubLogTag + "Adding Score to: " + getTeamName(getCurrentSelectedTeam()));
         }
     };
 
     private BroadcastReceiver onBoomDidShowReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomDidShow Received");
+            Log.d(LogTag, SubLogTag + "onBoomDidShow Received");
             if (getcurrentEvent() == NUMERIC_INPUTS_SELECTED_NOT_DISPLAYED) setcurrentEvent(NUMERIC_INPUTS_SELECTED_DISPLAYED);
+        }
+    };
+
+    private BroadcastReceiver onBoomLongClickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LogTag, SubLogTag + "onBoomLongClick Received");
+
         }
     };
 }

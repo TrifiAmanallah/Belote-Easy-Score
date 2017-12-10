@@ -18,16 +18,19 @@ import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 
 import static ingenuity.com.beloteeasyscore.EventsHelper.events.*;
 import static ingenuity.com.beloteeasyscore.EventsHelper.*;
+import static ingenuity.com.beloteeasyscore.EventsHelper.team.*;
 
 class InputMenu {
 
-    private static final String LogTag = "BeloteEasyScore: 3";
-    private Context mContext;
+    private static final String LogTag = "BeloteEasyScore";
+    private static final String SubLogTag = "InputMenu: ";
+    private Context mContext = null;
+    Activity mActivity = null;
 
     InputMenu(Context _Context) {
-        Log.d(LogTag, "NumericInput called");
+        Log.d(LogTag, SubLogTag + "NumericInput called");
         mContext = _Context;
-        Activity mActivity = (Activity) mContext;
+        mActivity = (Activity) mContext;
         registerReceivers();
         BoomMenuButton rightScoreAdder = (BoomMenuButton) mActivity.findViewById(R.id.rightScoreAdder);
         BoomMenuButton leftScoreAdder = (BoomMenuButton) mActivity.findViewById(R.id.leftScoreAdder);
@@ -36,16 +39,17 @@ class InputMenu {
     }
 
     private void createAddScoreButtons(BoomMenuButton _BoomMenuButton) {
-        Log.d(LogTag, "createAddScoreButtons called");
+        Log.d(LogTag, SubLogTag + "createAddScoreButtons called");
         _BoomMenuButton.setButtonEnum(ButtonEnum.Ham);
         _BoomMenuButton.setPiecePlaceEnum(PiecePlaceEnum.HAM_4);
         _BoomMenuButton.setButtonPlaceEnum(ButtonPlaceEnum.HAM_4);
+        _BoomMenuButton.setAutoHide(true);
         _BoomMenuButton.addBuilder(BuilderManager.getHamButtonBuilder());
         createInputsList(_BoomMenuButton);
     }
 
     private void createInputsList(BoomMenuButton localScoreAdder) {
-        Log.d(LogTag, "createInputsList called");
+        Log.d(LogTag, SubLogTag + "createInputsList called");
         localScoreAdder.clearBuilders();
         //Input Methode Gird
         HamButton.Builder builder = new HamButton.Builder()
@@ -121,6 +125,19 @@ class InputMenu {
         localScoreAdder.addBuilder(builder);
     }
 
+    private void changeInputMethode() {
+        BoomMenuButton rightScoreAdder = (BoomMenuButton) mActivity.findViewById(R.id.rightScoreAdder);
+        BoomMenuButton leftScoreAdder = (BoomMenuButton) mActivity.findViewById(R.id.leftScoreAdder);
+        createAddScoreButtons(rightScoreAdder);
+        createAddScoreButtons(leftScoreAdder);
+        /*if(getCurrentSelectedTeam() == LEFT_TEAM) {
+            leftScoreAdder.boom();
+        }
+        if(getCurrentSelectedTeam() == team.RIGHT_TEAM) {
+            rightScoreAdder.boomImmediately();
+        }*/
+    }
+
     private void registerReceivers() {
         IntentFilter onBoomClickedFilter = new IntentFilter("com.nightonke.boommenu.onBoomClicked");
         IntentFilter onBoomBackgroundClickFilter = new IntentFilter("com.nightonke.boommenu.onBoomBackgroundClick");
@@ -128,39 +145,42 @@ class InputMenu {
         IntentFilter onBoomDidHideFilter = new IntentFilter("com.nightonke.boommenu.onBoomDidHide");
         IntentFilter onBoomWillShowFilter = new IntentFilter("com.nightonke.boommenu.onBoomWillShow");
         IntentFilter onBoomDidShowFilter = new IntentFilter("com.nightonke.boommenu.onBoomDidShow");
+        IntentFilter onBoomLongClickFilter = new IntentFilter("com.nightonke.boommenu.onLongClick");
+
         mContext.registerReceiver(onBoomClickedReceiver, onBoomClickedFilter);
         mContext.registerReceiver(onBoomBackgroundClickReceiver, onBoomBackgroundClickFilter);
         mContext.registerReceiver(onBoomWillHideReceiver, onBoomWillHideFilter);
         mContext.registerReceiver(onBoomDidHideReceiver, onBoomDidHideFilter);
         mContext.registerReceiver(onBoomWillShowReceiver, onBoomWillShowFilter);
         mContext.registerReceiver(onBoomDidShowReceiver, onBoomDidShowFilter);
+        mContext.registerReceiver(onBoomLongClickReceiver, onBoomLongClickFilter);
     }
 
     private BroadcastReceiver onBoomClickedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomClicked received");
+            Log.d(LogTag, SubLogTag + "onBoomClicked received");
         }
     };
 
     private BroadcastReceiver onBoomBackgroundClickReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomBackgroundClick received");
+            Log.d(LogTag, SubLogTag + "onBoomBackgroundClick received");
         }
     };
 
     private BroadcastReceiver onBoomWillHideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomWillHide received");
+            Log.d(LogTag, SubLogTag + "onBoomWillHide received");
         }
     };
 
     private BroadcastReceiver onBoomDidHideReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomDidHide received");
+            Log.d(LogTag, SubLogTag + "onBoomDidHide received");
             if (getcurrentEvent() == SELECT_INPUT_MENU_DISPLAYED) setcurrentEvent(FIRST_LAUNCH);
         }
     };
@@ -168,15 +188,24 @@ class InputMenu {
     private BroadcastReceiver onBoomWillShowReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomWillShow received");
+            Log.d(LogTag, SubLogTag + "onBoomWillShow received");
         }
     };
 
     private BroadcastReceiver onBoomDidShowReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogTag, "onBoomDidShow received");
+            Log.d(LogTag, SubLogTag + "onBoomDidShow received");
             if (getcurrentEvent() == FIRST_LAUNCH) setcurrentEvent(SELECT_INPUT_MENU_DISPLAYED);
+        }
+    };
+
+    private BroadcastReceiver onBoomLongClickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LogTag, SubLogTag + "onBoomLongClick Received");
+            if (getcurrentEvent() == NUMERIC_INPUTS_SELECTED_NOT_DISPLAYED) setcurrentEvent(SELECT_INPUT_MENU_DISPLAYED);
+            changeInputMethode();
         }
     };
 }

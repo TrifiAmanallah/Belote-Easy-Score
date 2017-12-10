@@ -1,7 +1,11 @@
 package ingenuity.com.beloteeasyscore;
 
+import android.util.Log;
+
 class EventsHelper {
 
+    private static final String LogTag = "BeloteEasyScore";
+    private static final String SubLogTag = "EventsHelper: ";
     private static team currenTeam = team.LEFT_TEAM;
     private static events currentEvent = events.FIRST_LAUNCH;
     private static int leftTeamGlobalScore = 0;
@@ -35,6 +39,7 @@ class EventsHelper {
     }
 
     static void setcurrentEvent(events _events) {
+        Log.d(LogTag, SubLogTag + "Current Event: " + getEventName(_events) );
         currentEvent = _events;
     }
 
