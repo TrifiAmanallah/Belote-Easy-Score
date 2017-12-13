@@ -12,6 +12,8 @@
 
     <string name="input_numeric_displayed"></string>
 
+    <string name="facebook_app_id">1906592302992225</string>
+    <string name="fb_login_protocol_scheme">fb1906592302992225</string>
 
     <string name="simple_circle_button_example">Simple Circle Button Example</string>
     <string name="text_inside_circle_button_example">Text Inside Circle Button Example</string>
@@ -51,4 +53,6 @@
     <string name="text_ham_button_sub_text_normal">Ham Button Sub Text(Normal)</string>
     <string name="text_ham_button_sub_text_highlighted">Ham Button Sub Text(Highlighted)</string>
     <string name="text_ham_button_sub_text_unable">Ham Button Sub Text(Unable)</string>
+    <string name="title_activity_opening_menu">OpeningMenu</string>
+    <string name="action_settings">Settings</string>
 </resources>

@@ -1,6 +1,7 @@
 package ingenuity.com.beloteeasyscore;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,9 +20,10 @@ public class ScoreActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(LogTag, SubLogTag + "onCreate called");
-        setContentView(R.layout.activity_score);
-        InputMenu mInputMenu = new InputMenu(this);
-
+        //setContentView(R.layout.activity_score);
+        //InputMenu mInputMenu = new InputMenu(this);
+        Intent intent = new Intent(this, OpeningMenu.class);
+        startActivity(intent);
     }
 
 }
