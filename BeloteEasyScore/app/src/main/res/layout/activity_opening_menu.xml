@@ -11,7 +11,7 @@
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="16dp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -82,6 +82,7 @@
                     app:layout_constraintHorizontal_bias="0.812"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/myStats" />
+
             </android.support.constraint.ConstraintLayout>
         </FrameLayout>
     </android.support.constraint.ConstraintLayout>

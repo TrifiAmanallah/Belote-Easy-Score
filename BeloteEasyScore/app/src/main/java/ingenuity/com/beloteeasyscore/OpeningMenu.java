@@ -10,7 +10,7 @@ import android.widget.Toast;
 public class OpeningMenu extends Activity {
 
     private Context mContext = null;
-    Activity mActivity = null;
+    private Activity mActivity = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,12 +20,28 @@ public class OpeningMenu extends Activity {
         initializeButtonsListners();
     }
 
+    private void newTableMenuSelected() {
+        Toast.makeText(mContext, "newTableMenu", Toast.LENGTH_SHORT).show();
+    }
+
+    private void myFriendsMenuSelected() {
+        Toast.makeText(mContext, "myFriendsMenu", Toast.LENGTH_SHORT).show();
+    }
+
+    private void myStatsMenuSelected() {
+        Toast.makeText(mContext, "myStatsMenu", Toast.LENGTH_SHORT).show();
+    }
+
+    private void mySettingsMenuSelected() {
+        Toast.makeText(mContext, "mySettingsMenu", Toast.LENGTH_SHORT).show();
+    }
+
     private void initializeButtonsListners() {
         ImageButton newTableButton = (ImageButton) mActivity.findViewById(R.id.newTable);
         newTableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "newTableButton", Toast.LENGTH_SHORT).show();
+                newTableMenuSelected();
             }
         });
 
@@ -33,7 +49,7 @@ public class OpeningMenu extends Activity {
         myFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "myFriends", Toast.LENGTH_SHORT).show();
+                myFriendsMenuSelected();
             }
         });
 
@@ -41,7 +57,7 @@ public class OpeningMenu extends Activity {
         myStats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "myStats", Toast.LENGTH_SHORT).show();
+                myStatsMenuSelected();
             }
         });
 
@@ -49,7 +65,7 @@ public class OpeningMenu extends Activity {
         mySettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "mySettings", Toast.LENGTH_SHORT).show();
+                mySettingsMenuSelected();
             }
         });
     }

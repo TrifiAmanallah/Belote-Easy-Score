@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/player1Team1"
-        android:layout_width="140dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -20,21 +20,20 @@
         android:gravity="center_vertical"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="Player 1"
+        android:text="Ishak Ben yadder"
         android:textAlignment="center"
         android:textColor="@android:color/holo_blue_dark"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintHorizontal_bias="0.833"
+        app:layout_constraintEnd_toStartOf="@+id/verticalLine"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.045" />
 
     <TextView
         android:id="@+id/player2Team1"
-        android:layout_width="140dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
@@ -50,14 +49,14 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/player1Team1"
-        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/player1Team1"
         app:layout_constraintTop_toBottomOf="@+id/player1Team1"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.017" />
 
     <TextView
         android:id="@+id/player1Team2"
-        android:layout_width="140dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -74,14 +73,13 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.192"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/verticalLine"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.045" />
 
     <TextView
         android:id="@+id/player2Team2"
-        android:layout_width="140dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -100,7 +98,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/player1Team2"
         app:layout_constraintTop_toBottomOf="@+id/player1Team2"
-        app:layout_constraintVertical_bias="0.002" />
+        app:layout_constraintVertical_bias="0.017" />
 
     <TextView
         android:id="@+id/scoreTeam1"
@@ -136,12 +134,13 @@
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/player2Team2"
+        app:layout_constraintHorizontal_bias="0.459"
         app:layout_constraintStart_toStartOf="@+id/player2Team2"
         app:layout_constraintTop_toBottomOf="@+id/player2Team2"
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/verticalLine"
         android:layout_width="20dp"
         android:layout_height="0dp"
         android:layout_marginBottom="30dp"
@@ -156,7 +155,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/HorizentalLine"
         android:layout_width="0dp"
         android:layout_height="55dp"
         android:layout_marginEnd="8dp"
@@ -241,6 +240,58 @@
 
     </com.nightonke.boommenu.BoomMenuButton>
 
+    <ingenuity.com.beloteeasyscore.tools.CircleImageView
+        android:id="@+id/player1Team1Picture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/com_facebook_profile_picture_blank_portrait"
+        app:layout_constraintBottom_toBottomOf="@+id/player1Team1"
+        app:layout_constraintEnd_toStartOf="@+id/verticalLine"
+        app:layout_constraintStart_toEndOf="@+id/player1Team1"
+        app:layout_constraintTop_toTopOf="@+id/player1Team1" />
+
+    <ingenuity.com.beloteeasyscore.tools.CircleImageView
+        android:id="@+id/player1Team2Picture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/com_facebook_profile_picture_blank_portrait"
+        app:layout_constraintBottom_toBottomOf="@+id/player1Team2"
+        app:layout_constraintEnd_toStartOf="@+id/player1Team2"
+        app:layout_constraintStart_toEndOf="@+id/verticalLine"
+        app:layout_constraintTop_toTopOf="@+id/player1Team2" />
+
+    <ingenuity.com.beloteeasyscore.tools.CircleImageView
+        android:id="@+id/player2Team1Picture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/com_facebook_profile_picture_blank_portrait"
+        app:layout_constraintBottom_toBottomOf="@+id/player2Team1"
+        app:layout_constraintEnd_toStartOf="@+id/verticalLine"
+        app:layout_constraintStart_toEndOf="@+id/player2Team1"
+        app:layout_constraintTop_toTopOf="@+id/player2Team1" />
+
+    <ingenuity.com.beloteeasyscore.tools.CircleImageView
+        android:id="@+id/player2Team2Picture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/com_facebook_profile_picture_blank_portrait"
+        app:layout_constraintBottom_toBottomOf="@+id/player2Team2"
+        app:layout_constraintEnd_toStartOf="@+id/player2Team2"
+        app:layout_constraintStart_toEndOf="@+id/verticalLine"
+        app:layout_constraintTop_toTopOf="@+id/player2Team2"
+        app:layout_constraintVertical_bias="0.0" />
+
     <TextView
         android:id="@+id/numericInputText"
         android:layout_width="wrap_content"
@@ -266,4 +317,5 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
