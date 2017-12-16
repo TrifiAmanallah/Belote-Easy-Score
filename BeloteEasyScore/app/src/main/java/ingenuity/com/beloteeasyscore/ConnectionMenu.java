@@ -20,14 +20,23 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static ingenuity.com.beloteeasyscore.EventsHelper.*;
 
 public class ConnectionMenu extends Activity {
 
@@ -136,13 +145,13 @@ public class ConnectionMenu extends Activity {
         Log.d(LogTag, SubLogTag +"nextActivity Called");
         if(profile != null){
             Log.d(LogTag, SubLogTag +"nextActivity :: profile != null");
-            Intent main = new Intent(mActivity, ScoreActivity.class);
-            main.putExtra("name", profile.getFirstName());
-            main.putExtra("surname", profile.getLastName());
-            main.putExtra("imageUrl", profile.getProfilePictureUri(200,200).toString());
+            setUserProfile(profile);
+            setUserName(profile.getFirstName());
+            setUserSurname(profile.getLastName());
+            setUserPictureUrl(profile.getProfilePictureUri(200,200).toString());
+            Intent main = new Intent(mActivity, OpeningMenu.class);
             startActivity(main);
         }
         else Log.d(LogTag, SubLogTag +"nextActivity :: profile == null");
     }
-
 }

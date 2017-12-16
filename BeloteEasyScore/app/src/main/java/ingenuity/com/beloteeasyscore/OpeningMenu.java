@@ -2,6 +2,7 @@ package ingenuity.com.beloteeasyscore;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,11 +22,13 @@ public class OpeningMenu extends Activity {
     }
 
     private void newTableMenuSelected() {
-        Toast.makeText(mContext, "newTableMenu", Toast.LENGTH_SHORT).show();
+        Intent _Activity = new Intent(mActivity, ScoreActivity.class);
+        startActivity(_Activity);
     }
 
     private void myFriendsMenuSelected() {
-        Toast.makeText(mContext, "myFriendsMenu", Toast.LENGTH_SHORT).show();
+        Intent _Activity = new Intent(mActivity, FriendsMenu.class);
+        startActivity(_Activity);
     }
 
     private void myStatsMenuSelected() {
