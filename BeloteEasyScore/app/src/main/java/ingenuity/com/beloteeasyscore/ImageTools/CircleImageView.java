@@ -1,4 +1,4 @@
-package ingenuity.com.beloteeasyscore.tools;
+package ingenuity.com.beloteeasyscore.ImageTools;
 
 import android.content.Context;
 import android.content.res.TypedArray;

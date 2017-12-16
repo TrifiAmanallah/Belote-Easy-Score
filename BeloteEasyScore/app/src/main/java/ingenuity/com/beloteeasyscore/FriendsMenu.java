@@ -1,189 +1,87 @@
 package ingenuity.com.beloteeasyscore;
 
 import android.app.Activity;
-
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphRequestAsyncTask;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
+import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import ingenuity.com.beloteeasyscore.FacebookTools.FriendsListPresenter;
+import ingenuity.com.beloteeasyscore.FacebookTools.FriendsListView;
+import ingenuity.com.beloteeasyscore.FacebookTools.adapter.adapter.FriendsAdapter;
+import ingenuity.com.beloteeasyscore.FacebookTools.model.FriendItemData;
 
-public class FriendsMenu extends Activity {
+public class FriendsMenu extends Activity implements FriendsListView {
 
     private static final String LogTag = "BeloteEasyScore";
     private static final String SubLogTag = "FriendsMenu: ";
+    private ArrayList<FriendItemData> friendsList = new ArrayList<FriendItemData>();
+    private SwipeRefreshLayout swipeLayout;
+    private RecyclerView lvFriendsList;
+    private FriendsAdapter friendsAdapter;
+    private FriendsListPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LogTag, SubLogTag +"onCreate Called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_menu);
-        getFBFriendsList();
+        presenter = new FriendsListPresenter(this);
+        presenter.onGetFBFriendsList();
     }
 
-    private void getFBFriendsList() {
-        //fbToken return from login with facebook
-        Log.d(LogTag, SubLogTag +"getFBFriendsList Called");
-        AccessToken fbToken = AccessToken.getCurrentAccessToken();
-        GraphRequestAsyncTask r = GraphRequest.newGraphPathRequest(fbToken,
-                "/me/taggable_friends", new GraphRequest.Callback() {
+    @Override
+    public void initializeView() {
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setColorSchemeColors(
+                getResources().getColor(android.R.color.holo_green_dark),
+                getResources().getColor(android.R.color.holo_red_dark),
+                getResources().getColor(android.R.color.holo_blue_dark),
+                getResources().getColor(android.R.color.holo_orange_dark));
+        swipeLayout.setRefreshing(true);
 
-                    @Override
-                    public void onCompleted(GraphResponse response) {
-                        parseResponse(response.getJSONObject());
-                    }
-                }
+        lvFriendsList = (RecyclerView) findViewById(R.id.rv_friends_list);
 
-        ).executeAsync();
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        lvFriendsList.setLayoutManager(linearLayoutManager);
 
-    }
+        friendsAdapter = new FriendsAdapter(friendsList);
+        lvFriendsList.setAdapter(friendsAdapter);
 
-    private void parseResponse(JSONObject friends ) {
+        lvFriendsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItemsCount = linearLayoutManager.getItemCount();
+                int visibleItemsCount = lvFriendsList.getChildCount();
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
 
-        try {
-            JSONArray friendsArray = (JSONArray) friends.get("data");
-            if (friendsArray != null) {
-                for (int i = 0; i < friendsArray.length(); i++) {
-                    FriendItem item = new FriendItem();
-                    try {
-                        item.setUserId(friendsArray.getJSONObject(i).get(
-                                "id")
-                                + "");
-
-                        item.setUserName(friendsArray.getJSONObject(i).get(
-                                "name")
-                                + "");
-                        JSONObject picObject = new JSONObject(friendsArray
-                                .getJSONObject(i).get("picture") + "");
-                        String picURL = (String) (new JSONObject(picObject
-                                .get("data").toString())).get("url");
-                        item.setPictureURL(picURL);
-                        friendsList.add(item);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                // facebook use paging if have "next" this mean you still have friends if not start load fbFriends list
-                String next = friends.getJSONObject("paging")
-                        .getString("next");
-                if (next != null) {
-                    getFBFriendsList(next);
-                } else {
-                    loadFriendsList();
-                }
+                presenter.onLoadMore(totalItemsCount, visibleItemsCount, firstVisibleItemPosition);
             }
-        } catch (JSONException e1) {
-            loadFriendsList();
-            e1.printStackTrace();
+        });
+    }
+
+    @Override
+    public void loadFriendsList(ArrayList<FriendItemData> fLst) {
+        friendsList.removeAll(friendsList);
+        friendsList.addAll(fLst);
+        swipeLayout.setRefreshing(false);
+
+        if ((friendsList != null) && (friendsList.size() > 0)) {
+            lvFriendsList.setVisibility(View.VISIBLE);
+            friendsAdapter.notifyDataSetChanged();
+        } else {
+            lvFriendsList.setVisibility(View.GONE);
         }
     }
 
-    private void getFBFriendsList(String next) {
-        //here i used volley to get next page
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest sr = new StringRequest(Request.Method.GET, next,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        JSONObject friends = null;
-                        try {
-                            friends = new JSONObject(response);
-                            parseResponse(friends);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                return null;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-
-        private void loadFriendsList() {
-            swipeLayout.setRefreshing(false);
-            if ((friendsList != null) && (friendsList.size() > 0)) {
-                lvFriendsList.setVisibility(View.VISIBLE);
-                friendsAdapter.notifyDataSetChanged();
-            } else {
-                lvFriendsList.setVisibility(View.GONE);
-            }
-        }
-    /*private void getFriendsList(){
-        Log.d(LogTag, SubLogTag +"getFriendsList Called");
-        AccessToken token = AccessToken.getCurrentAccessToken();
-        GraphRequest graphRequest = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
-                try {
-                    Log.d(LogTag, SubLogTag +"GraphRequest onComplete Called");
-                    JSONArray jsonArrayFriends = jsonObject.getJSONObject("friendlist").getJSONArray("data");
-                    JSONObject friendlistObject = jsonArrayFriends.getJSONObject(0);
-                    String friendListID = friendlistObject.getString("id");
-                    Log.d(LogTag, SubLogTag +"friendListID = " + friendListID);
-                    myNewGraphReq(friendListID);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        Bundle param = new Bundle();
-        param.putString("fields", "friendlist", "members");
-        graphRequest.setParameters(param);
-        graphRequest.executeAsync();
+    @Override
+    public void showError() {
+        Toast.makeText(this, "loginErrorMessage", Toast.LENGTH_LONG).show();
     }
-
-    private void myNewGraphReq(String friendlistId) {
-        Log.d(LogTag, SubLogTag +"myNewGraphReq Called ");
-        final String graphPath = "/"+friendlistId+"/members/";
-        AccessToken token = AccessToken.getCurrentAccessToken();
-        GraphRequest request = new GraphRequest(token, graphPath, null, HttpMethod.GET, new GraphRequest.Callback() {
-            @Override
-            public void onCompleted(GraphResponse graphResponse) {
-                Log.d(LogTag, SubLogTag +"GraphResponse onCompleted Called ");
-                JSONObject object = graphResponse.getJSONObject();
-                try {
-                    JSONArray arrayOfUsersInFriendList= object.getJSONArray("data");
-                *//* Do something with the user list *//*
-                *//* ex: get first user in list, "name" *//*
-                    JSONObject user = arrayOfUsersInFriendList.getJSONObject(0);
-                    String usersName = user.getString("name");
-                    Log.d(LogTag, SubLogTag +"First Friend Name: " + usersName );
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        Bundle param = new Bundle();
-        param.putString("fields", "name");
-        request.setParameters(param);
-        request.executeAsync();
-    }*/
-
 }

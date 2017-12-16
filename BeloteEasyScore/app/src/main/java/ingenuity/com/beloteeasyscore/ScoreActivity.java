@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ingenuity.com.beloteeasyscore.tools.DownloadImage;
+import ingenuity.com.beloteeasyscore.ImageTools.DownloadImage;
 
 import static ingenuity.com.beloteeasyscore.EventsHelper.*;
 

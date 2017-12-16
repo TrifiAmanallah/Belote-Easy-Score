@@ -1,4 +1,4 @@
-package ingenuity.com.beloteeasyscore.tools;
+package ingenuity.com.beloteeasyscore.ImageTools;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;

@@ -240,7 +240,7 @@
 
     </com.nightonke.boommenu.BoomMenuButton>
 
-    <ingenuity.com.beloteeasyscore.tools.CircleImageView
+    <ingenuity.com.beloteeasyscore.ImageTools.CircleImageView
         android:id="@+id/player1Team1Picture"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -253,7 +253,7 @@
         app:layout_constraintStart_toEndOf="@+id/player1Team1"
         app:layout_constraintTop_toTopOf="@+id/player1Team1" />
 
-    <ingenuity.com.beloteeasyscore.tools.CircleImageView
+    <ingenuity.com.beloteeasyscore.ImageTools.CircleImageView
         android:id="@+id/player1Team2Picture"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -266,7 +266,7 @@
         app:layout_constraintStart_toEndOf="@+id/verticalLine"
         app:layout_constraintTop_toTopOf="@+id/player1Team2" />
 
-    <ingenuity.com.beloteeasyscore.tools.CircleImageView
+    <ingenuity.com.beloteeasyscore.ImageTools.CircleImageView
         android:id="@+id/player2Team1Picture"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -279,7 +279,7 @@
         app:layout_constraintStart_toEndOf="@+id/player2Team1"
         app:layout_constraintTop_toTopOf="@+id/player2Team1" />
 
-    <ingenuity.com.beloteeasyscore.tools.CircleImageView
+    <ingenuity.com.beloteeasyscore.ImageTools.CircleImageView
         android:id="@+id/player2Team2Picture"
         android:layout_width="40dp"
         android:layout_height="40dp"
