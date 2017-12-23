@@ -1,6 +1,7 @@
 package ingenuity.com.beloteeasyscore.FacebookTools;
 
 
+
 import com.facebook.AccessToken;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class FriendsListPresenter {
     private String nextPageId;
     private String previousPageId;
     private boolean isLoadingMore = false;
+    private boolean isFullLoading = true;
+
 
     public FriendsListPresenter(FriendsListView view) {
         this.view = view;
@@ -48,12 +51,12 @@ public class FriendsListPresenter {
 
     private void loadAll() {
         if (nextPageId != null){
+            isFullLoading = true;
             final Timer timerAsync = new Timer();
             TimerTask timerTaskAsync = new TimerTask() {
                 @Override
                 public void run() {
                     if ((nextPageId != null) && !isLoadingMore) {
-                        //loadMore
                         isLoadingMore = true;
                         getFBFriendsList(userId, fbToken.getToken(), PAGE_SIZE, nextPageId, friendsListCallback);
                     }
@@ -95,8 +98,8 @@ public class FriendsListPresenter {
                         friendsList.remove(index);
                     }
                 }
-
-                view.loadFriendsList(friendsList);
+                if(nextPageId == null) isFullLoading = false;
+                if(!isFullLoading) view.loadFriendsList(friendsList);
             } else {
                 //TODO show error message
             }
