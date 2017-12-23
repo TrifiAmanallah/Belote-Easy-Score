@@ -1,8 +1,11 @@
 package ingenuity.com.beloteeasyscore.FacebookTools;
 
+
 import com.facebook.AccessToken;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ingenuity.com.beloteeasyscore.FacebookTools.model.FriendItemData;
 import ingenuity.com.beloteeasyscore.FacebookTools.model.FriendsListResponse;
@@ -43,6 +46,26 @@ public class FriendsListPresenter {
         }
     }
 
+    private void loadAll() {
+        if (nextPageId != null){
+            final Timer timerAsync = new Timer();
+            TimerTask timerTaskAsync = new TimerTask() {
+                @Override
+                public void run() {
+                    if ((nextPageId != null) && !isLoadingMore) {
+                        //loadMore
+                        isLoadingMore = true;
+                        getFBFriendsList(userId, fbToken.getToken(), PAGE_SIZE, nextPageId, friendsListCallback);
+                    }
+                    if (nextPageId == null) {
+                        timerAsync.cancel();
+                    }
+                }
+            };
+            timerAsync.schedule(timerTaskAsync, 0, 500);
+        }
+    }
+
     private final Callback<FriendsListResponse> friendsListCallback = new Callback<FriendsListResponse>() {
         @Override
         public void onResponse(Call<FriendsListResponse> call, retrofit2.Response<FriendsListResponse> response) {
@@ -77,6 +100,7 @@ public class FriendsListPresenter {
             } else {
                 //TODO show error message
             }
+            loadAll();
         }
 
         @Override

@@ -2,11 +2,14 @@ package ingenuity.com.beloteeasyscore.FacebookTools.adapter.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,11 +21,14 @@ import ingenuity.com.beloteeasyscore.R;
 import ingenuity.com.beloteeasyscore.FacebookTools.model.FriendItemData;
 import ingenuity.com.beloteeasyscore.ImageTools.DownloadImage;
 
-public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     public final int ITEM_TYPE_FRIEND = 0;
     public final int ITEM_TYPE_LOAD = 1;
-
+    private static final String LogTag = "BeloteEasyScore";
+    private static final String SubLogTag = "FriendsAdapter: ";
     private ArrayList<FriendItemData> friendsList;
+    private ArrayList<FriendItemData> friendsListFiltered;
+    private FriendFilter friendFilter;
     private Context context;
 
     /**
@@ -30,6 +36,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      */
     public FriendsAdapter(ArrayList<FriendItemData> friendsList) {
         this.friendsList = friendsList;
+        this.friendsListFiltered = friendsList;
+        getFilter();
     }
 
     @Override
@@ -47,9 +55,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if(getItemViewType(position) == ITEM_TYPE_FRIEND) {
             FriendViewHolder friendViewHolder = ((FriendViewHolder)viewHolder);
-            String friendName = friendsList.get(position).getName();
+            String friendName = friendsListFiltered.get(position).getName();
             friendViewHolder.tvUserName.setText(position + "  " + friendName);
-            String imageUrl = friendsList.get(position).getPicture();
+            String imageUrl = friendsListFiltered.get(position).getPicture();
             if (imageUrl != null) {
                 if (imageUrl.trim().length() > 0) {
                     //Picasso.with(context).load(imageUrl).into(friendViewHolder.ivUser);
@@ -64,12 +72,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return friendsList.size();
+        return friendsListFiltered.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (friendsList.get(position) != null) {
+        if (friendsListFiltered.get(position) != null) {
             return ITEM_TYPE_FRIEND;
         } else {
             return ITEM_TYPE_LOAD;
@@ -95,6 +103,46 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public LoadingViewHolder(View v) {
             super(v);
             pbLoading = (ProgressBar) v.findViewById(R.id.pb_loading);
+        }
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (friendFilter == null) {
+            friendFilter = new FriendFilter();
+        }
+        return friendFilter;
+    }
+
+    private class FriendFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint!=null && constraint.length()>0) {
+                ArrayList<FriendItemData> tempList = new ArrayList<FriendItemData>();
+                for (FriendItemData _FriendItemData : friendsList) {
+
+                    if (_FriendItemData != null) {
+                        if (_FriendItemData.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                            tempList.add(_FriendItemData);
+                        }
+                    }
+                }
+                filterResults.count = tempList.size();
+                filterResults.values = tempList;
+                friendsListFiltered = tempList;
+
+            } else {
+                filterResults.count = friendsList.size();
+                filterResults.values = friendsList;
+                friendsListFiltered = friendsList;
+            }
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            notifyDataSetChanged();
         }
     }
 }

@@ -27,6 +27,7 @@ public class OpeningMenu extends Activity {
     }
 
     private void myFriendsMenuSelected() {
+        //Intent _Activity = new Intent(mActivity, FriendsMenu.class);
         Intent _Activity = new Intent(mActivity, FriendsMenu.class);
         startActivity(_Activity);
     }
