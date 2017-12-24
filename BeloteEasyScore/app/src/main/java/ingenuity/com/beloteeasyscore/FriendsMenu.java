@@ -23,6 +23,8 @@ import ingenuity.com.beloteeasyscore.FacebookTools.FriendsListView;
 import ingenuity.com.beloteeasyscore.FacebookTools.adapter.adapter.FriendsAdapter;
 import ingenuity.com.beloteeasyscore.FacebookTools.model.FriendItemData;
 
+import static ingenuity.com.beloteeasyscore.EventsHelper.*;
+
 public class FriendsMenu extends AppCompatActivity implements FriendsListView,SearchView.OnQueryTextListener {
 
     private static final String LogTag = "BeloteEasyScore";
@@ -77,7 +79,15 @@ public class FriendsMenu extends AppCompatActivity implements FriendsListView,Se
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewFriendList.setLayoutManager(linearLayoutManager);
 
-        friendsAdapter = new FriendsAdapter(friendsList);
+        FriendsAdapter.OnItemClickListener friendClickListener = new FriendsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FriendItemData _FriendItemData) {
+                Log.d(LogTag, SubLogTag +"Selected Friend:");
+                Log.d(LogTag, SubLogTag +"Name:" + _FriendItemData.getName());
+                addNewPlayer(_FriendItemData.getName(),_FriendItemData.getPicture());
+            }
+        };
+        friendsAdapter = new FriendsAdapter(friendsList,friendClickListener);
         recyclerViewFriendList.setAdapter(friendsAdapter);
 
         recyclerViewFriendList.addOnScrollListener(new RecyclerView.OnScrollListener() {

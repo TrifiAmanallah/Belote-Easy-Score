@@ -21,6 +21,8 @@ import ingenuity.com.beloteeasyscore.R;
 import ingenuity.com.beloteeasyscore.FacebookTools.model.FriendItemData;
 import ingenuity.com.beloteeasyscore.ImageTools.DownloadImage;
 
+import static ingenuity.com.beloteeasyscore.EventsHelper.*;
+
 public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     public final int ITEM_TYPE_FRIEND = 0;
     public final int ITEM_TYPE_LOAD = 1;
@@ -30,15 +32,20 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private ArrayList<FriendItemData> friendsListFiltered;
     private FriendFilter friendFilter;
     private Context context;
+    private final OnItemClickListener listener;
 
-    /**
-     * @param friendsList
-     */
-    public FriendsAdapter(ArrayList<FriendItemData> friendsList) {
+    public FriendsAdapter(ArrayList<FriendItemData> friendsList, OnItemClickListener _listener) {
         this.friendsList = friendsList;
         this.friendsListFiltered = friendsList;
+        this.listener = _listener;
         getFilter();
     }
+
+    public interface OnItemClickListener {
+        void onItemClick(FriendItemData _FriendItemData);
+    }
+
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -67,6 +74,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             Animation anim = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
             friendViewHolder.ivUser.setAnimation(anim);
+            friendViewHolder.bind(friendsListFiltered.get(position), listener);
         }
     }
 
@@ -93,6 +101,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(v);
             ivUser = (ImageView) v.findViewById(R.id.iv_User);
             tvUserName = (TextView) v.findViewById(R.id.tv_UserName);
+        }
+
+        public void bind(final FriendItemData _item, final OnItemClickListener _listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    _listener.onItemClick(_item);
+                }
+            });
         }
     }
 
